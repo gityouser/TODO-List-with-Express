@@ -1,9 +1,9 @@
-const
-  input = document.querySelector('input'),
-  itemList = document.querySelector('.ul-list'),
-  form = document.querySelector('.form'),
-  clearList = document.querySelector('.clear-list'),
-  inputList = [];
+const input = document.querySelector('input'),
+      ul = document.querySelector('.ul-list'),
+      form = document.querySelector('.form'),
+      clearList = document.querySelector('.clear-list'),
+      inputList = [];
+
 
 function initiateListeners() {
   form.addEventListener('submit', pushToInputList);
@@ -26,21 +26,32 @@ function pushToInputList(e) {
 }
 
 function renderListItems() {
-  const
-  li = document.createElement('li'),
-  img = document.createElement('img');
+  for (let i = ul.children.length; i > 0; i--) {
+    ul.removeChild(ul.children[i-1])
+  }
   inputList.forEach((item, index) => {
-    itemList.appendChild(li);
+    const li = document.createElement('li'),
+          img = document.createElement('img');
+    ul.appendChild(li);
     li.innerText = item.name;
-    li.dataset.index = index;
     li.appendChild(img);
     li.classList.add('li');
     img.src = "http://panchkula.nic.in/wp-content/uploads/2017/06/x-mark.png";
     img.classList.add('x-mark');
     li.addEventListener('click', markAsCompleted);
-    img.addEventListener('click', deleteListItems);
-  })
+    img.addEventListener('click', () => deleteListItems(index))
+  });
 }
+
+function deleteListItems(index) {
+    if(index = 1) {
+      ul.removeChild(ul.children[0]);
+    } else {
+      ul.removeChild(ul.children[index]);
+    }
+    inputList.splice(index, 1);
+    console.log(inputList);
+};
 
 function markAsCompleted(event) {
   if(event.target.completed === false) {
@@ -50,19 +61,12 @@ function markAsCompleted(event) {
     event.target.completed = false;
     event.target.style.cssText = 'color:black; text-decoration: none'
   }
-
 }
 
-function deleteListItems(event) {
-  event.target.parentElement.remove();
-  console.log(event.target.parentElement.dataset.index);
-  inputList.splice(event.target.parentElement.dataset.index, 1);
-
-}
 function clearEntireList() {
-  while(itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-    // itemList.firstChild.remove();
+  while(ul.firstChild) {
+    ul.removeChild(ul.firstChild);
+    // ul.firstChild.remove();
     inputList.length = 0;
   }
-}
+};
