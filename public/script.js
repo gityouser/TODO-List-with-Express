@@ -1,9 +1,21 @@
 const input = document.querySelector('input'),
       ul = document.querySelector('.ul-list'),
       form = document.querySelector('.form'),
-      clearList = document.querySelector('.clear-list'),
-      inputList = [];
+      clearList = document.querySelector('.clear-list');
+let inputList = [];
+let inputValue = {
+  name:input.value,
+  completed:false
+};
 
+fetch('/todo', {  method: 'GET' })
+.then(res => res.json())
+.then(data => {
+  console.log(data);
+  inputList = data;
+
+  renderListItems();
+});
 
 function initiateListeners() {
   form.addEventListener('submit', pushToInputList);
@@ -13,12 +25,24 @@ initiateListeners();
 
 function pushToInputList(e) {
   e.preventDefault();
+
   if(input.value.length > 0) {
     inputList.push({
       name:input.value,
       completed:false
     });
+    fetch('/todo', {
+      method: 'POST',
+      headers: {
+     'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name:input.value,
+        completed:false
+      })
+    })
     input.value = '';
+
     renderListItems();
     // displayCompleted();
   } else {
@@ -27,7 +51,6 @@ function pushToInputList(e) {
 }
 
 function renderListItems() {
-  console.log(inputList);
   for (let i = ul.children.length; i > 0; i--) {
     ul.removeChild(ul.children[i-1])
   }
@@ -35,7 +58,6 @@ function renderListItems() {
 }
 
 function createLi(item, index) {
-  console.log('Create: ', item, index);
   const li = document.createElement('li'),
         img = document.createElement('img');
   ul.appendChild(li);
@@ -55,11 +77,10 @@ function deleteListItem(index, e) {
   e.stopPropagation();
   inputList.splice(index, 1);
   renderListItems();
+  // fetch DELETE
 }
 
 function toggleCompleted(index) {
-  // console.log(inputList[index].completed);
-  console.log(event);
   inputList[index].completed = !inputList[index].completed;
   renderListItems();
 }
@@ -67,29 +88,5 @@ function toggleCompleted(index) {
 function clearEntireList() {
   inputList = [];
   renderListItems();
+  // fetch DELETE ALL
 };
-
-//   ------------------ v02 ------------------------
-// inputList.forEach((item, index) => {
-//   if(e.target.parentElement.textContent === item.name) {
-//     inputList.splice(index, 1);
-//     console.log(item.name);
-//     console.log(inputList);
-//     return;
-//   }
-// })
-// e.target.parentElement.remove();
-
-//   ------------------ v01 ------------------------
-//   console.log(index);
-// // Grab the index of the node targeted by the event/click.
-//   let nodeIndex = Array.from(ul.children).indexOf(ul.children[index]);
-//   console.log(nodeIndex);
-// //Check if the idex of the node element equals the coresponding index in inputList array.
-//   if (Array.from(ul.children).indexOf(ul.children[index]) < index) {
-//      ul.removeChild(ul.children[nodeIndex +1])
-//   } else {
-//     ul.removeChild(ul.children[index]);
-//   }
-//     inputList.splice(index -1, 1);
-//     console.log(inputList);

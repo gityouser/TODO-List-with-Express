@@ -1,0 +1,23 @@
+{
+  "name": "todo-list",
+  "version": "0.0.1",
+  "description": "Simple-todo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gityouser/TODO-List-with-Express.git"
+  },
+  "author": "Andrei & Eugen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gityouser/TODO-List-with-Express/issues"
+  },
+  "homepage": "https://github.com/gityouser/TODO-List-with-Express#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}
